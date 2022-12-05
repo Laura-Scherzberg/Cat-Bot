@@ -7,42 +7,52 @@ int free_mode = 2;
 int luz_mode = 3;
 int sleep_mode = 4;
 
-void switch_mode() {
+#define trigPin 8
+#define echoPin 9
+
+long espera;
+long tempo=1000;
+
+
+long measureDistance(){
+  long duration, distance;
+
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH); //converte para int
+
+  distance = duration / 58;
+  Serial.print("distance measured:");
+  Serial.println(distance);
+  if(distance>75) return 70;
+  else return distance;
+}
+
+void switch_mode(int val) {
  // Serial.println("switch");
   if (val == 'P') {
     current_mode = 0;
-    Wire.beginTransmission(SLAVE_ADDR);
-    Wire.write(val);
-    Wire.endTransmission();
   }
   else if (val == 'W') {
     current_mode = 1;
-    Wire.beginTransmission(SLAVE_ADDR);
-    Wire.write(val);
-    Wire.endTransmission();
   }
   else if (val == 'X') {
     current_mode = 2;
-    Wire.beginTransmission(SLAVE_ADDR);
-    Wire.write(val);
-    Wire.endTransmission();
   }
   else if (val == 'Y') {
     current_mode = 3;
-    Wire.beginTransmission(SLAVE_ADDR);
-    Wire.write(val);
-    Wire.endTransmission();
   }
   else if (val == 'Z') {
     current_mode = 4;
-    Wire.beginTransmission(SLAVE_ADDR);
-    Wire.write(val);
-    Wire.endTransmission();
   }
 
 }
 
-void telecomando() {
+/*void telecomando() {
   Serial.println(val);
   Wire.beginTransmission(SLAVE_ADDR);
   Wire.write(val);
@@ -56,11 +66,17 @@ void nada() {
   Wire.write(nope);
   Wire.endTransmission();
 }
+*/
 
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-pinMode(LED_BUILTIN, OUTPUT);
+  randomSeed(analogRead(A0)); // for generating random numbers
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  espera=millis();
 }
 
 void loop() {
@@ -72,20 +88,17 @@ void loop() {
     Wire.beginTransmission(SLAVE_ADDR);
     Wire.write(val);
     Wire.endTransmission();
+    switch_mode(val);
   }
+  if(current_mode==free_mode/*&&millis()-espera>=tempo*/){ 
+    int dis = (int) measureDistance();
+    Serial.println(dis);
+    delay(50);
+    Wire.beginTransmission(SLAVE_ADDR);   
+    Wire.write(dis);
+    Wire.endTransmission();
 
-// if (Serial.available() > 0) {
-//   val = Serial.read();  
-//   //digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-//   } telecomando();  
-   
-    //o que tem de fazer consoante o modo
-//    delay(50);
-//    switch_mode();
-//    if (current_mode == tele_mode) telecomando();
-//    else if (current_mode == free_mode) ;   //free roaming
-//    else if (current_mode == luz_mode) ;    // luz
-//    else if (current_mode == sleep_mode) ;  //sleep
-//   }   
+    espera=millis();
+  }
 
 }
