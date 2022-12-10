@@ -199,7 +199,10 @@ byte closed_eyes_down[8] = {
 };
 
 void function_eyes_closed()
-{
+{ 
+  lcd.createChar(0, closed_eyes_top);
+  lcd.createChar(1, closed_eyes_down);
+  
   // top left
   lcd.setCursor(2, 0);
   lcd.write(byte(0));
@@ -209,6 +212,7 @@ void function_eyes_closed()
   lcd.write(byte(0));
   lcd.setCursor(5, 0);
   lcd.write(byte(0));
+
   // top right
   lcd.setCursor(10, 0);
   lcd.write(byte(0));
@@ -218,6 +222,7 @@ void function_eyes_closed()
   lcd.write(byte(0));
   lcd.setCursor(13, 0);
   lcd.write(byte(0));
+
   //down left
   lcd.setCursor(2, 1);
   lcd.write(byte(1));
@@ -227,6 +232,7 @@ void function_eyes_closed()
   lcd.write(byte(1));
   lcd.setCursor(5, 1);
   lcd.write(byte(1));
+
   //down right
   lcd.setCursor(10, 1);
   lcd.write(byte(1));
@@ -237,7 +243,6 @@ void function_eyes_closed()
   lcd.setCursor(13, 1);
   lcd.write(byte(1));
 
-  Serial.println("blink");
 }
 
 long sleep_time;
@@ -293,67 +298,92 @@ void sleepMode()
 
 }
 
-byte open_eyes_top_center[8] = {
+byte open_eyes_top_center_left_new[8] = {
   0b00000,
   0b00000,
   0b00000,
   0b11111,
-  0b11111,
-  0b11111,
-  0b11111,
-  0b11111
-};
-
-byte open_eyes_top_left[8] = {
   0b00000,
-  0b00000,
-  0b00000,
-  0b00000,
+  0b00001,
   0b00011,
-  0b00111,
-  0b01111,
-  0b11111
+  0b00011
 };
 
-byte open_eyes_top_right[8] = {
+byte open_eyes_top_center_right_new[8] = {
   0b00000,
   0b00000,
   0b00000,
+  0b11111,
   0b00000,
+  0b10000,
   0b11000,
-  0b11100,
-  0b11110,
-  0b11111
+  0b11000
 };
 
-byte open_eyes_down_center[8] = {
-  0b11111,
-  0b11111,
-  0b11111,
-  0b11111,
+byte open_eyes_top_left_new[8] = {
+  0b00000,
+  0b00000,
+  0b00000,
+  0b00001,
+  0b00011,
+  0b00110,
+  0b01100,
+  0b11000
+};
+
+
+byte open_eyes_top_right_new[8] = {
+  0b00000,
+  0b00000,
+  0b00000,
+  0b10000,
+  0b11000,
+  0b01100,
+  0b00110,
+  0b00011
+};
+
+
+byte open_eyes_down_center_left_new[8] = {
+  0b00011,
+  0b00011,
+  0b00001,
+  0b00000,
   0b11111,
   0b00000,
   0b00000,
   0b00000
 };
 
-byte open_eyes_down_left[8] = {
-  0b11111,
-  0b01111,
-  0b00111,
-  0b00011,
+byte open_eyes_down_center_right_new[8] = {
+  0b11000,
+  0b11000,
+  0b10000,
   0b00000,
+  0b11111,
   0b00000,
   0b00000,
   0b00000
 };
 
-byte open_eyes_down_right[8] = {
-  0b11111,
-  0b11110,
-  0b11100,
+
+byte open_eyes_down_left_new[8] = {
   0b11000,
+  0b01100,
+  0b00110,
+  0b00011,
+  0b00001,
   0b00000,
+  0b00000,
+  0b00000
+};
+
+byte open_eyes_down_right_new[8] = {
+  0b00011,
+  0b00110,
+  0b01100,
+  0b11000,
+  0b10000,
   0b00000,
   0b00000,
   0b00000
@@ -361,68 +391,65 @@ byte open_eyes_down_right[8] = {
 
 void function_eyes_open()
 {
+  lcd.createChar(0, open_eyes_top_left_new);
+  lcd.createChar(1, open_eyes_top_center_left_new);
+  lcd.createChar(2, open_eyes_top_center_right_new);
+  lcd.createChar(3, open_eyes_top_right_new);
+  
+  lcd.createChar(4, open_eyes_down_left_new);
+  lcd.createChar(5, open_eyes_down_center_left_new);
+  lcd.createChar(6, open_eyes_down_center_right_new);
+  lcd.createChar(7, open_eyes_down_right_new);
+  
   // top left
   lcd.setCursor(2, 0);
-  lcd.write(byte(4));
+  lcd.write(byte(0));
+
   lcd.setCursor(3, 0);
-  lcd.write(byte(2));
+  lcd.write(byte(1));
   lcd.setCursor(4, 0);
   lcd.write(byte(2));
+
   lcd.setCursor(5, 0);
-  lcd.write(byte(6));
+  lcd.write(byte(3));
+
   // top right
   lcd.setCursor(10, 0);
-  lcd.write(byte(4));
+  lcd.write(byte(0));
+
   lcd.setCursor(11, 0);
-  lcd.write(byte(2));
+  lcd.write(byte(1));
   lcd.setCursor(12, 0);
   lcd.write(byte(2));
+
   lcd.setCursor(13, 0);
-  lcd.write(byte(6));
+  lcd.write(byte(3));
+
   //down left
   lcd.setCursor(2, 1);
-  lcd.write(byte(5));
+  lcd.write(byte(4));
+
   lcd.setCursor(3, 1);
-  lcd.write(byte(3));
+  lcd.write(byte(5));
   lcd.setCursor(4, 1);
-  lcd.write(byte(3));
+  lcd.write(byte(6));
+
   lcd.setCursor(5, 1);
   lcd.write(byte(7));
+
   //down right
   lcd.setCursor(10, 1);
-  lcd.write(byte(5));
+  lcd.write(byte(4));
+
   lcd.setCursor(11, 1);
-  lcd.write(byte(3));
+  lcd.write(byte(5));
   lcd.setCursor(12, 1);
-  lcd.write(byte(3));
+  lcd.write(byte(6));
+
   lcd.setCursor(13, 1);
   lcd.write(byte(7));
-
-  Serial.println("open");
-}
-/*
-
-void send_information()
-{
-  //transmissão dos dados do sensor de distância
-  Wire.beginTransmission(SLAVE_ADDR);
-  int distance = measureDistance();
-  Wire.write(distance);
-  Wire.endTransmission();
-  //transmissão dos caracteres para ativar os motores
-  if (Serial.available() > 0) // lê do bluetooth
-  {
-    Serial.print("val");
-    val = Serial.read();
-    delay(50);
-    Wire.beginTransmission(SLAVE_ADDR);
-    Wire.write(val);
-    Wire.endTransmission();
-    switch_mode(val);
-  }
 }
 
-*/
 
 long initial_time;
 int delay_blink;
@@ -466,14 +493,7 @@ void setup() {
   stopPlayback();
 
   lcd.begin(16, 2);
-  lcd.createChar(0, closed_eyes_top);
-  lcd.createChar(1, closed_eyes_down);
-  lcd.createChar(2, open_eyes_top_center);
-  lcd.createChar(3, open_eyes_down_center);
-  lcd.createChar(4, open_eyes_top_left);
-  lcd.createChar(5, open_eyes_down_left);
-  lcd.createChar(6, open_eyes_top_right);
-  lcd.createChar(7, open_eyes_down_right);
+  // criar mais caracteres e substituir durante a execução
   lcd.clear();
 }
 
