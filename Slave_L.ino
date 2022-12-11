@@ -14,7 +14,7 @@ long tempo=1000;
 
 int ST = 220;  //VELOCIDADE TELECOMANDO
 int SL = 190;  //velocidade com luz
-int SF = 150;  //velocidade free roaming
+int SF = 190;  //velocidade free roaming
 int current_mode = 0;
 int tele_mode = 1;
 int free_mode = 2;
@@ -55,11 +55,11 @@ void telecomando(int val) {
     right(ST);
   }
   if (val == 'I') {
-    topright(ST);
+    topleft(ST);
   }
 
   if (val == 'J') {
-    topleft(ST);
+    topright(ST);
   }
 
   if (val == 'K') {
@@ -195,7 +195,7 @@ void luz() {
   //  Serial.print("RSensor");
   //  Serial.println(RSensor);
 
-  if (((LSensor == 0) && (MSensor == 0) && (RSensor == 0)) || ((LSensor == 1) && (MSensor == 0) && (RSensor == 1))) {
+  if ( (LSensor == 1) && (MSensor == 0) && (RSensor == 1)) {
     //MOVE FORWARD
     forward(SL);
 
@@ -285,14 +285,21 @@ void data(int val) {
     val = Wire.read();
     Serial.println(val);
   }
+  if(val==69) {
+    forward(SF);
+    current_mode=tele_mode;//porque funciona nesse modo
+  }
+  else {
+  
   switch_mode(val);  //verifica o modo
-
+  
   //o que tem de fazer consoante o modo
   if (current_mode == 0) Serial.print("nada");
   else if (current_mode == tele_mode) telecomando(val);
   else if (current_mode == free_mode&&(millis()-espera>=tempo || val<min_distance)) free_roam(val);  //free roaming faz a cada x tempo ou quando a distancia é pequena
   else if (current_mode == sleep_mode) Serial.print("sleep");  //sleep
-}
+  }
+  }
 
 
 void setup() {
